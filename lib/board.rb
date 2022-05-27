@@ -8,12 +8,22 @@ class Board
   def place(piece)
     col = piece.pos[0]
     rank = piece.pos[1]
-    @board[decode_col(col)][decode_rank(rank)] = piece.unicode
+    @board[decode_rank(rank)][decode_col(col)] = piece.unicode
     puts "#{piece.unicode} placed onto board at #{piece.pos}."
   end
 
   def create_interface
     @board.each
+  end
+
+  def print_interface
+    string = ""
+    @board.each_index do |row_idx|
+      board[row_idx].each_index do |elem_idx|
+        if row_idx % 2 == 0 && elem_idx % 2 == 0
+        end
+      end
+    end
   end
 
   def decode_col(col_idx)

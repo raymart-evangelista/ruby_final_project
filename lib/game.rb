@@ -2,12 +2,13 @@ require_relative 'board'
 require_relative 'pieces'
 
 class Game
-  attr_accessor :board
+  attr_accessor :game_board
   def initialize
-    # initialize board
-    @board = Board.new
+    # initialize game_board
+    @game_board = Board.new
     init_pieces
-    # initialize pieces onto starting positions on board
+    # initialize pieces onto starting positions on game_board
+    p @game_board.board
   end
 
   def init_pieces
@@ -27,22 +28,22 @@ class Game
     w_pawn6 = Pawn.new("f2", "\u2659", "white")
     w_pawn7 = Pawn.new("g2", "\u2659", "white")
     w_pawn8 = Pawn.new("h2", "\u2659", "white")
-    board.place(w_king)
-    board.place(w_queen)
-    board.place(w_rook1)
-    board.place(w_rook2)
-    board.place(w_bishop1)
-    board.place(w_bishop2)
-    board.place(w_knight1)
-    board.place(w_knight2)
-    board.place(w_pawn1)
-    board.place(w_pawn2)
-    board.place(w_pawn3)
-    board.place(w_pawn4)
-    board.place(w_pawn5)
-    board.place(w_pawn6)
-    board.place(w_pawn7)
-    board.place(w_pawn8)
+    game_board.place(w_king)
+    game_board.place(w_queen)
+    game_board.place(w_rook1)
+    game_board.place(w_rook2)
+    game_board.place(w_bishop1)
+    game_board.place(w_bishop2)
+    game_board.place(w_knight1)
+    game_board.place(w_knight2)
+    game_board.place(w_pawn1)
+    game_board.place(w_pawn2)
+    game_board.place(w_pawn3)
+    game_board.place(w_pawn4)
+    game_board.place(w_pawn5)
+    game_board.place(w_pawn6)
+    game_board.place(w_pawn7)
+    game_board.place(w_pawn8)
 
     b_king = King.new("e8", "\u265A", "black")
     b_queen = Queen.new("d8", "\u265B", "black")
@@ -61,21 +62,21 @@ class Game
     b_pawn7 = Pawn.new("g7", "\u265F", "black")
     b_pawn8 = Pawn.new("h7", "\u265F", "black")
 
-    board.place(b_king)
-    board.place(b_queen)
-    board.place(b_rook1)
-    board.place(b_rook2)
-    board.place(b_bishop1)
-    board.place(b_bishop2)
-    board.place(b_knight1)
-    board.place(b_knight2)
-    board.place(b_pawn1)
-    board.place(b_pawn2)
-    board.place(b_pawn3)
-    board.place(b_pawn4)
-    board.place(b_pawn5)
-    board.place(b_pawn6)
-    board.place(b_pawn7)
-    board.place(b_pawn8)
+    game_board.place(b_king)
+    game_board.place(b_queen)
+    game_board.place(b_rook1)
+    game_board.place(b_rook2)
+    game_board.place(b_bishop1)
+    game_board.place(b_bishop2)
+    game_board.place(b_knight1)
+    game_board.place(b_knight2)
+    game_board.place(b_pawn1)
+    game_board.place(b_pawn2)
+    game_board.place(b_pawn3)
+    game_board.place(b_pawn4)
+    game_board.place(b_pawn5)
+    game_board.place(b_pawn6)
+    game_board.place(b_pawn7)
+    game_board.place(b_pawn8)
   end
 end
