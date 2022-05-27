@@ -9,6 +9,7 @@ class Game
     init_pieces
     # initialize pieces onto starting positions on game_board
     @game_board.print_interface
+    # @game_board.flip_interface
   end
 
   def init_pieces

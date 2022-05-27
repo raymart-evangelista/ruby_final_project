@@ -19,8 +19,11 @@ class Board
   end
 
   def print_interface
+
+    puts "  [a][b][c][d][e][f][g][h]"
     string = ""
     @board.each_index do |row_idx|
+      string.concat("#{row_idx+1} ")
       @board[row_idx].each_index do |elem_idx|
         # [0][0] black bg
         if row_idx % 2 == 0 && elem_idx % 2 == 0 # black bg for even row, even col
@@ -49,9 +52,16 @@ class Board
           end
         end
       end
+      string.concat(" #{row_idx+1}")
       puts string
       string = ""
     end
+    puts "  [a][b][c][d][e][f][g][h]"
+  end
+
+  def flip_interface
+    @board = @board.reverse
+    print_interface
   end
 
   def decode_col(col_idx)
