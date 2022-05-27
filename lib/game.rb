@@ -8,7 +8,7 @@ class Game
     @game_board = Board.new
     init_pieces
     # initialize pieces onto starting positions on game_board
-    p @game_board.board
+    @game_board.print_interface
   end
 
   def init_pieces

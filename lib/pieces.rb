@@ -4,7 +4,7 @@ class Piece
   attr_accessor :pos, :unicode, :color
   def initialize(start_pos, unicode, color)
     @pos = start_pos
-    @unicode = unicode
+    @unicode = " " + unicode + " "
     @color = color
   end
 

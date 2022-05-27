@@ -1,3 +1,5 @@
+require 'pry-byebug'
+
 class Board
   attr_accessor :board
   def initialize
@@ -19,10 +21,36 @@ class Board
   def print_interface
     string = ""
     @board.each_index do |row_idx|
-      board[row_idx].each_index do |elem_idx|
-        if row_idx % 2 == 0 && elem_idx % 2 == 0
+      @board[row_idx].each_index do |elem_idx|
+        # [0][0] black bg
+        if row_idx % 2 == 0 && elem_idx % 2 == 0 # black bg for even row, even col
+          if @board[row_idx][elem_idx].nil?
+            string.concat("\e[100m#{"   "}\e[0m")
+          else
+            string.concat("\e[100m#{ @board[row_idx][elem_idx] }\e[0m")
+          end
+        elsif row_idx % 2 == 0 && elem_idx % 2 == 1 # white bg for even row, odd col
+          if @board[row_idx][elem_idx].nil?
+            string.concat("\e[107m#{"   "}\e[0m")
+          else
+            string.concat("\e[107m#{ @board[row_idx][elem_idx] }\e[0m")
+          end
+        elsif row_idx % 2 == 1 && elem_idx % 2 == 0 # white bg for odd row, even col
+          if @board[row_idx][elem_idx].nil?
+            string.concat("\e[107m#{"   "}\e[0m")
+          else
+            string.concat("\e[107m#{ @board[row_idx][elem_idx] }\e[0m")
+          end
+        elsif row_idx % 2 == 1 && elem_idx % 2 == 1 # black bg for odd row, odd col
+          if @board[row_idx][elem_idx].nil?
+            string.concat("\e[100m#{"   "}\e[0m")
+          else
+            string.concat("\e[100m#{ @board[row_idx][elem_idx] }\e[0m")
+          end
         end
       end
+      puts string
+      string = ""
     end
   end
 
