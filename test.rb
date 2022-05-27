@@ -1,9 +1,9 @@
-require "./lib/colors/colors.rb"
+# require "./lib/colors/colors.rb"
 
 puts "\e[47m#{"  "}\e[0m"
 puts "\e[40m#{"  "}\e[0m"
-puts "Hello".bg_black
-puts "Helllo".bg_blue
+# puts "Hello".bg_black
+# puts "Helllo".bg_blue
 puts "\e[40m#{"  "}\e[0m"
 puts "\e[107m#{"  "}\e[0m" + "\e[100m#{"  "}\e[0m"
 
@@ -18,7 +18,7 @@ board.each_index do |row_idx|
     elsif row_idx % 2 == 1 && elem_idx % 2 == 0
       string.concat("\e[100m#{"   "}\e[0m")
     elsif row_idx % 2 == 1 && elem_idx % 2 == 1
-      string.concat("\e[107m#{" \u2658 "}\e[0m")
+      string.concat("\e[107m#{" \u265E "}\e[0m")
     end
   end
   puts string
