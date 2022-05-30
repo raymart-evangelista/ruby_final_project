@@ -1,6 +1,8 @@
+require_relative 'decoder'
 require 'pry-byebug'
 
 class Board
+  include Decoder
   attr_accessor :board
   def initialize
     @board = Array.new(8) { Array.new(8) }
@@ -10,16 +12,109 @@ class Board
   def place(piece)
     col = piece.pos[0]
     rank = piece.pos[1]
-    @board[decode_rank(rank)][decode_col(col)] = piece.unicode
+    @board[Decoder.decode_rank(rank)][Decoder.decode_col(col)] = piece
     puts "#{piece.unicode} placed onto board at #{piece.pos}."
   end
 
-  def create_interface
-    @board.each
+  def spot_taken?(position)
+    col = position[0]
+    rank = position[1]
+    true unless @board[rank][col].nil?
+  end
+
+  def update_interface(piece)
+    moves = piece.moves
+    col = piece.moves.data[0]
+    rank = piece.moves.data[1]
+    spot = [rank, col]
+    # get piece color
+    piece_color = piece.color
+
+    puts "  [a][b][c][d][e][f][g][h]"
+    string = ""
+    @board.each_index do |rank_idx|
+      string.concat("#{rank_idx+1} ")
+      @board[rank_idx].each_index do |col_idx|
+
+        # if the current spot is nil-->an open spot,
+        # check if the spot is where the given piece can move to
+        # if it is, print green color
+        # else print normally
+        curr_spot = @board[rank_idx][col_idx]
+        if curr_spot.nil?
+          if moves.child.include?([col_idx, rank_idx])
+            string.concat("\e[102m#{"   "}\e[0m")
+          else
+            if rank_idx % 2 == 0 && col_idx % 2 == 0 # black bg for even row, even col
+              if @board[rank_idx][col_idx].nil?
+                string.concat("\e[100m#{"   "}\e[0m")
+              else
+                string.concat("\e[100m#{ @board[rank_idx][col_idx].unicode }\e[0m")
+              end
+            elsif rank_idx % 2 == 0 && col_idx % 2 == 1 # white bg for even row, odd col
+              if @board[rank_idx][col_idx].nil?
+                string.concat("\e[107m#{"   "}\e[0m")
+              else
+                string.concat("\e[107m#{ @board[rank_idx][col_idx].unicode }\e[0m")
+              end
+            elsif rank_idx % 2 == 1 && col_idx % 2 == 0 # white bg for odd row, even col
+              if @board[rank_idx][col_idx].nil?
+                string.concat("\e[107m#{"   "}\e[0m")
+              else
+                string.concat("\e[107m#{ @board[rank_idx][col_idx].unicode }\e[0m")
+              end
+            elsif rank_idx % 2 == 1 && col_idx % 2 == 1 # black bg for odd row, odd col
+              if @board[rank_idx][col_idx].nil?
+                string.concat("\e[100m#{"   "}\e[0m")
+              else
+                string.concat("\e[100m#{ @board[rank_idx][col_idx].unicode }\e[0m")
+              end
+            end
+          end
+        # else, the spot isn't open, it can either be taken by self or opponent
+        else
+          # get the piece's color of the current spot 
+          spot_color = @board[rank_idx][col_idx].color
+          if piece_color.eql?(spot_color)
+            # if it's the same spot as the piece make BLUE, otherwise print normally 
+            if piece.moves.data.eql?(curr_spot.moves.data)
+              string.concat("\e[104m#{ piece.unicode }\e[0m")
+            elsif rank_idx % 2 == 0 && col_idx % 2 == 0
+              string.concat("\e[100m#{ @board[rank_idx][col_idx].unicode }\e[0m")
+            elsif rank_idx % 2 == 0 && col_idx % 2 == 1 # white bg for even row, odd col
+              string.concat("\e[107m#{ @board[rank_idx][col_idx].unicode }\e[0m")
+            elsif rank_idx % 2 == 1 && col_idx % 2 == 0 # white bg for odd row, even col
+              string.concat("\e[107m#{ @board[rank_idx][col_idx].unicode }\e[0m")
+            elsif rank_idx % 2 == 1 && col_idx % 2 == 1 # black bg for odd row, odd col
+              string.concat("\e[100m#{ @board[rank_idx][col_idx].unicode }\e[0m")
+            end
+          # else, spot color is opponents, in that case if it's a valid spot a piece can take, show RED, else print normally
+          else
+            if moves.child.include?(curr_spot.moves.data)
+              string.concat("\e[101m#{ curr_spot.unicode }\e[0m")
+            # else print normally
+            else
+              if rank_idx % 2 == 0 && col_idx % 2 == 0
+                string.concat("\e[100m#{ curr_spot.unicode }\e[0m")
+              elsif rank_idx % 2 == 0 && col_idx % 2 == 1 # white bg for even row, odd col
+                string.concat("\e[107m#{ curr_spot.unicode }\e[0m")
+              elsif rank_idx % 2 == 1 && col_idx % 2 == 0 # white bg for odd row, even col
+                string.concat("\e[107m#{ curr_spot.unicode }\e[0m")
+              elsif rank_idx % 2 == 1 && col_idx % 2 == 1 # black bg for odd row, odd col
+                string.concat("\e[100m#{ curr_spot.unicode }\e[0m")
+              end
+            end
+          end
+        end
+      end
+      string.concat(" #{rank_idx+1}")
+      puts string
+      string = ""
+    end
+    puts "  [a][b][c][d][e][f][g][h]"
   end
 
   def print_interface
-
     puts "  [a][b][c][d][e][f][g][h]"
     string = ""
     @board.each_index do |row_idx|
@@ -30,25 +125,25 @@ class Board
           if @board[row_idx][elem_idx].nil?
             string.concat("\e[100m#{"   "}\e[0m")
           else
-            string.concat("\e[100m#{ @board[row_idx][elem_idx] }\e[0m")
+            string.concat("\e[100m#{ @board[row_idx][elem_idx].unicode }\e[0m")
           end
         elsif row_idx % 2 == 0 && elem_idx % 2 == 1 # white bg for even row, odd col
           if @board[row_idx][elem_idx].nil?
             string.concat("\e[107m#{"   "}\e[0m")
           else
-            string.concat("\e[107m#{ @board[row_idx][elem_idx] }\e[0m")
+            string.concat("\e[107m#{ @board[row_idx][elem_idx].unicode }\e[0m")
           end
         elsif row_idx % 2 == 1 && elem_idx % 2 == 0 # white bg for odd row, even col
           if @board[row_idx][elem_idx].nil?
             string.concat("\e[107m#{"   "}\e[0m")
           else
-            string.concat("\e[107m#{ @board[row_idx][elem_idx] }\e[0m")
+            string.concat("\e[107m#{ @board[row_idx][elem_idx].unicode }\e[0m")
           end
         elsif row_idx % 2 == 1 && elem_idx % 2 == 1 # black bg for odd row, odd col
           if @board[row_idx][elem_idx].nil?
             string.concat("\e[100m#{"   "}\e[0m")
           else
-            string.concat("\e[100m#{ @board[row_idx][elem_idx] }\e[0m")
+            string.concat("\e[100m#{ @board[row_idx][elem_idx].unicode }\e[0m")
           end
         end
       end
@@ -62,50 +157,5 @@ class Board
   def flip_interface
     @board = @board.reverse
     print_interface
-  end
-
-  def decode_col(col_idx)
-    decoder(col_idx)
-  end
-
-  def decode_rank(rank_idx)
-    decoder(rank_idx)
-  end
-
-  def decoder(idx)
-    case idx
-    when "a"
-      0
-    when "b"
-      1
-    when "c"
-      2
-    when "d"
-      3
-    when "e"
-      4
-    when "f"
-      5
-    when "g"
-      6
-    when "h"
-      7
-    when "1"
-      0
-    when "2"
-      1
-    when "3"
-      2
-    when "4"
-      3
-    when "5"
-      4
-    when "6"
-      5
-    when "7"
-      6
-    when "8"
-      7
-    end
   end
 end
