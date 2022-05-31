@@ -16,10 +16,29 @@ class Board
     puts "#{piece.unicode} placed onto board at #{piece.pos}."
   end
 
+  def clean(spot)
+    col = spot[0]
+    rank = spot[1]
+    @board[rank][col] = nil
+  end
+
   def spot_taken?(position)
     col = position[0]
     rank = position[1]
     true unless @board[rank][col].nil?
+  end
+
+  def verify_move(piece, input)
+    col = Decoder.decode_col(input[0])
+    rank = Decoder.decode_rank(input[1])
+    # byebug
+    if @board[rank][col].nil? && piece.moves.child.include?([col,rank])
+      true
+    elsif piece.moves.child.include?([col,rank])
+      true
+    else
+      false
+    end
   end
 
   def update_interface(piece)

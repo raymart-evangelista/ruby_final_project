@@ -13,22 +13,41 @@ class Game
   end
 
   def play_game
-    # get player 1
-    # get player 2
-    # current player decides which piece to move
-    # piece.gets.chomp
-    # verify piece
-    # find valid spots to move to
-    @w_knight1.generate_moveset
-    # pass moveset into board and check for spots to move to
-    # @game_board.update_interface(curr_moveset)
-    @game_board.update_interface(@w_knight1)
-    # update interface to reflect moveset
-    # get player input for where to move piece
-    # validate that player choice reflects the available choices
-    # move piece
-    # @game_board.place
-    # @game_board.clean_spot
+    loop do
+      # get player 1
+      # get player 2
+      # current player decides which piece to move
+      # piece.gets.chomp
+      # verify piece
+      # find valid spots to move to
+      # byebug
+      @w_knight1.generate_moveset
+
+      # pass moveset into board and check for spots to move to
+      # @game_board.update_interface(curr_moveset)
+      @game_board.update_interface(@w_knight1)
+      
+      # update interface to reflect moveset
+      # get player input for where to move piece
+
+      loop do
+        puts "Where do you want to move knight?"
+        input = gets.chomp
+        if @game_board.verify_move(@w_knight1, input)
+          @w_knight1.update_position(@game_board, input)
+          @game_board.place(@w_knight1)
+          @w_knight1.generate_moveset
+          # @game_board.update_spot
+          @game_board.update_interface(@w_knight1)
+          break
+        end
+      end
+
+      # validate that player choice reflects the available choices
+      # move piece
+      # @game_board.place
+      # @game_board.clean_spot
+    end
   end
 
   def init_pieces

@@ -17,12 +17,17 @@ class Piece
     # byebug
   end
 
-  def update_position(curr_pos, destination)
-    curr_pos = destination
+  def update_position(board, destination)
+    # clean previous spot
+    board.clean(@pos_arr)
+    @pos = destination
+    @pos_arr = [Decoder.decode_col(@pos[0]), Decoder.decode_rank(@pos[1])]
+    @moves = Tree.new(@pos_arr)
   end
 
   def show_position(curr_pos)
     puts "Current Position is: #{curr_pos}"
+
   end
 end
 
