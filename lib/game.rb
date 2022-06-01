@@ -21,7 +21,7 @@ class Game
       # verify piece
       # find valid spots to move to
       # byebug
-      @w_knight1.generate_moveset
+      @w_knight1.generate_moveset(@game_board)
 
       # pass moveset into board and check for spots to move to
       # @game_board.update_interface(curr_moveset)
@@ -36,7 +36,7 @@ class Game
         if @game_board.verify_move(@w_knight1, input)
           @w_knight1.update_position(@game_board, input)
           @game_board.place(@w_knight1)
-          @w_knight1.generate_moveset
+          @w_knight1.generate_moveset(@game_board)
           # @game_board.update_spot
           @game_board.update_interface(@w_knight1)
           break
