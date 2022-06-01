@@ -62,7 +62,16 @@ class Board
         curr_spot = @board[rank_idx][col_idx]
         if curr_spot.nil?
           if moves.child.include?([col_idx, rank_idx])
-            string.concat("\e[102m#{"   "}\e[0m")
+            if rank_idx % 2 == 0 && col_idx % 2 == 0
+              string.concat("\e[100m#{" \u25cf "}\e[0m")
+            elsif rank_idx % 2 == 0 && col_idx % 2 == 1
+              string.concat("\e[107m#{" \u25cf "}\e[0m")
+            elsif rank_idx % 2 == 1 && col_idx % 2 == 0
+              string.concat("\e[107m#{" \u25cf "}\e[0m")
+            elsif rank_idx % 2 == 1 && col_idx % 2 == 1
+              string.concat("\e[100m#{" \u25cf "}\e[0m")
+            end
+            # string.concat("\e[102m#{"   "}\e[0m")
           else
             if rank_idx % 2 == 0 && col_idx % 2 == 0 # black bg for even row, even col
               if @board[rank_idx][col_idx].nil?
