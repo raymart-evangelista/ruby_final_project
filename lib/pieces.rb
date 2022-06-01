@@ -29,6 +29,86 @@ class Piece
     puts "Current Position is: #{curr_pos}"
 
   end
+
+  def traverse_horizontal_increase(board, col, rank)
+    if col <= 7
+      spot = [col, rank]
+      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
+      traverse_horizontal_increase(board, col+1, rank)
+    else
+      return
+    end
+  end
+
+  def traverse_horizontal_decrease(board, col, rank)
+    if col >= 0
+      spot = [col, rank]
+      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
+      traverse_horizontal_decrease(board, col-1, rank)
+    else
+      return
+    end
+  end
+
+  def traverse_vertical_increase(board, col, rank)
+    if rank <= 7
+      spot = [col, rank]
+      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
+      traverse_vertical_increase(board, col, rank+1)
+    else
+      return
+    end
+  end
+
+  def traverse_vertical_decrease(board, col, rank)
+    if rank >= 0
+      spot = [col, rank]
+      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
+      traverse_vertical_decrease(board, col, rank-1)
+    else
+      return
+    end
+  end
+
+  def traverse_left_diagonal_increase(board, col, rank)
+    if col <= 7 && rank <= 7
+      spot = [col, rank]
+      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
+      traverse_left_diagonal_increase(board, col+1, rank+1)
+    else
+      return
+    end
+  end
+
+  def traverse_left_diagonal_decrease(board, col, rank)
+    if col >= 0 && rank >= 0
+      spot = [col, rank]
+      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
+      traverse_left_diagonal_decrease(board, col-1, rank-1)
+    else
+      return
+    end
+  end
+
+  def traverse_right_diagonal_increase(board, col, rank)
+    if col <= 7 && rank >= 0
+      spot = [col, rank]
+      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
+      traverse_right_diagonal_increase(board, col+1, rank-1)
+    else
+      return
+    end
+  end
+
+  def traverse_right_diagonal_decrease(board, col, rank)
+    if col >= 0 && rank <= 7
+      spot = [col, rank]
+      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
+      traverse_right_diagonal_decrease(board, col-1, rank+1)
+    else
+      return
+    end
+  end
 end
 
 class King < Piece
@@ -72,13 +152,19 @@ class King < Piece
 end
 
 class Queen < Piece
-  def traverse_horizontal
-  end
+  def generate_moveset(board)
+    col = @moves.data[0]
+    rank = @moves.data[1]
 
-  def traverse_vertical
-  end
+    traverse_horizontal_increase(board, col+1, rank)
+    traverse_horizontal_decrease(board, col-1, rank)
+    traverse_vertical_increase(board, col, rank+1)
+    traverse_vertical_decrease(board, col, rank-1)
 
-  def traverse_diagonal
+    traverse_left_diagonal_increase(board, col+1, rank+1)
+    traverse_left_diagonal_decrease(board, col-1, rank-1)
+    traverse_right_diagonal_increase(board, col+1, rank-1)
+    traverse_right_diagonal_decrease(board, col-1, rank+1)
   end
 end
 
@@ -94,47 +180,6 @@ class Rook < Piece
     traverse_horizontal_decrease(board, col-1, rank)
     traverse_vertical_increase(board, col, rank+1)
     traverse_vertical_decrease(board, col, rank-1)
-
-  end
-  
-  def traverse_horizontal_increase(board, col, rank)
-    if col <= 7
-      spot = [col, rank]
-      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
-      traverse_horizontal_increase(board, col+1, rank)
-    else
-      return
-    end
-  end
-
-  def traverse_horizontal_decrease(board, col, rank)
-    if col >= 0
-      spot = [col, rank]
-      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
-      traverse_horizontal_decrease(board, col-1, rank)
-    else
-      return
-    end
-  end
-
-  def traverse_vertical_increase(board, col, rank)
-    if rank <= 7
-      spot = [col, rank]
-      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
-      traverse_vertical_increase(board, col, rank+1)
-    else
-      return
-    end
-  end
-
-  def traverse_vertical_decrease(board, col, rank)
-    if rank >= 0
-      spot = [col, rank]
-      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
-      traverse_vertical_decrease(board, col, rank-1)
-    else
-      return
-    end
   end
 end
 

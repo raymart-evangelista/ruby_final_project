@@ -21,11 +21,11 @@ class Game
       # verify piece
       # find valid spots to move to
       # byebug
-      @w_rook2.generate_moveset(@game_board)
+      @w_queen.generate_moveset(@game_board)
 
       # pass moveset into board and check for spots to move to
       # @game_board.update_interface(curr_moveset)
-      @game_board.update_interface(@w_rook2)
+      @game_board.update_interface(@w_queen)
       
       # update interface to reflect moveset
       # get player input for where to move piece
@@ -33,12 +33,12 @@ class Game
       loop do
         puts "Where do you want to move rook?"
         input = gets.chomp
-        if @game_board.verify_move(@w_rook2, input)
-          @w_rook2.update_position(@game_board, input)
-          @game_board.place(@w_rook2)
-          @w_rook2.generate_moveset(@game_board)
+        if @game_board.verify_move(@w_queen, input)
+          @w_queen.update_position(@game_board, input)
+          @game_board.place(@w_queen)
+          @w_queen.generate_moveset(@game_board)
           # @game_board.update_spot
-          @game_board.update_interface(@w_rook2)
+          @game_board.update_interface(@w_queen)
           break
         end
       end
