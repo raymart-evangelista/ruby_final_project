@@ -72,20 +72,75 @@ class King < Piece
 end
 
 class Queen < Piece
+  def traverse_horizontal
+  end
+
+  def traverse_vertical
+  end
+
+  def traverse_diagonal
+  end
 end
 
 class Rook < Piece
-  def generate_moveset
+  def generate_moveset(board)
     col = @moves.data[0]
     rank = @moves.data[1]
   
     # traverse board leftward, upward, rightward, downward
     # until the next move is out of bounds OR another piece,
     # add move to moveset
+    traverse_horizontal_increase(board, col+1, rank)
+    traverse_horizontal_decrease(board, col-1, rank)
+    traverse_vertical_increase(board, col, rank+1)
+    traverse_vertical_decrease(board, col, rank-1)
+
+  end
+  
+  def traverse_horizontal_increase(board, col, rank)
+    if col <= 7
+      spot = [col, rank]
+      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
+      traverse_horizontal_increase(board, col+1, rank)
+    else
+      return
+    end
+  end
+
+  def traverse_horizontal_decrease(board, col, rank)
+    if col >= 0
+      spot = [col, rank]
+      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
+      traverse_horizontal_decrease(board, col-1, rank)
+    else
+      return
+    end
+  end
+
+  def traverse_vertical_increase(board, col, rank)
+    if rank <= 7
+      spot = [col, rank]
+      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
+      traverse_vertical_increase(board, col, rank+1)
+    else
+      return
+    end
+  end
+
+  def traverse_vertical_decrease(board, col, rank)
+    if rank >= 0
+      spot = [col, rank]
+      @moves.child.push(spot) if board.board[rank][col].nil? || !board.board[rank][col].color.eql?(self.color)
+      traverse_vertical_decrease(board, col, rank-1)
+    else
+      return
+    end
   end
 end
 
 class Bishop < Piece
+  def traverse_diagonal
+  end
 end
 
 class Knight < Piece
@@ -106,8 +161,6 @@ class Knight < Piece
       # get all legal positions the knight can take on and make that a child in the tree
     col = @moves.data[0]
     rank = @moves.data[1]
-
-    # byebug
 
     if col - 2 >= 0 && rank + 1 <= 7
       spot = [col - 2, rank + 1]

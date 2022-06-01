@@ -1,5 +1,9 @@
 # ruby_final_project
 
+struggles:
+- NoMethodError for moveset
+- nil
+
 resources used:
 - ASCI codes
   - https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
