@@ -184,7 +184,14 @@ class Rook < Piece
 end
 
 class Bishop < Piece
-  def traverse_diagonal
+  def generate_moveset(board)
+    col = @moves.data[0]
+    rank = @moves.data[1]
+
+    traverse_left_diagonal_increase(board, col+1, rank+1)
+    traverse_left_diagonal_decrease(board, col-1, rank-1)
+    traverse_right_diagonal_increase(board, col+1, rank-1)
+    traverse_right_diagonal_decrease(board, col-1, rank+1)
   end
 end
 
@@ -243,4 +250,65 @@ class Knight < Piece
 end
 
 class Pawn < Piece
+  attr_accessor :turns
+  def initialize(start_pos, unicode, color)
+    super(start_pos, unicode, color)
+    @turns = 0
+  end
+  def generate_moveset(board)
+    col = @moves.data[0]
+    rank = @moves.data[1]
+    if @turns == 0
+      # pawn can move one or two spaces up
+      if rank == 1
+        spot = [col, rank + 1]
+        @moves.child.push(spot) if board.board[spot[1]][spot[0]].nil?
+        spot = [col, rank + 2]
+        @moves.child.push(spot) if board.board[spot[1]][spot[0]].nil?
+      elsif rank == 6 
+        spot = [col, rank - 1]
+        @moves.child.push(spot) if board.board[spot[1]][spot[0]].nil?
+        spot = [col, rank - 2]
+        @moves.child.push(spot) if board.board[spot[1]][spot[0]].nil?
+      end
+    else
+      if color.eql?("white") && rank != 7
+        spot = [col, rank + 1]
+        @moves.child.push(spot) if board.board[spot[1]][spot[0]].nil?
+        spot = [col - 1, rank + 1]
+        @moves.child.push(spot) unless board.board[spot[1]][spot[0]].nil?
+        spot = [col + 1, rank + 1]
+        @moves.child.push(spot) unless board.board[spot[1]][spot[0]].nil?
+      elsif color.eql?("black") && rank != 0
+        spot = [col, rank - 1]
+        @moves.child.push(spot) if board.board[spot[1]][spot[0]].nil?
+        spot = [col - 1, rank - 1]
+        @moves.child.push(spot) unless board.board[spot[1]][spot[0]].nil?
+        spot = [col + 1, rank - 1]
+        @moves.child.push(spot) unless board.board[spot[1]][spot[0]].nil?
+      end
+
+      # check en passant
+      # if color.eql?("white") && rank == 4
+      #   # check if black moves two spaces on their first turn
+      #   b_spot = [col - 1, rank]
+      #   if !board.board[b_spot[1][spot[0]]].nil? && board.board[b_spot[1]][spot[0]].instance_of? Pawn && board.board[b_spot[1][spot[0]]].turns == 1
+      #     spot = [col - 1, rank + 1]
+      #     @moves.child.push(spot)
+      #   end
+      #   b_spot = [col + 1, rank]
+      #   if !board.board[b_spot[1][spot[0]]].nil? && board.board[b_spot[1]][spot[0]].instance_of? Pawn && board.board[b_spot[1][spot[0]]].turns == 1
+      #     spot = [col + 1, rank + 1]
+      #     @moves.child.push(spot)
+      #   end
+      # end
+    end
+    @turns += 1
+  end
+
+  def check_promotion
+  end
+
+  def check_en_passant
+  end
 end

@@ -71,7 +71,6 @@ class Board
             elsif rank_idx % 2 == 1 && col_idx % 2 == 1
               string.concat("\e[100m#{" \u25cf "}\e[0m")
             end
-            # string.concat("\e[102m#{"   "}\e[0m")
           else
             if rank_idx % 2 == 0 && col_idx % 2 == 0 # black bg for even row, even col
               if @board[rank_idx][col_idx].nil?
